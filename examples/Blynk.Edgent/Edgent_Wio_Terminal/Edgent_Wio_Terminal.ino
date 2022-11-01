@@ -1,19 +1,20 @@
 /*
  * Required libraries:
- *  - Seeed Arduino rpcunified
+ *  - Seeed Arduino rpcUnified
  *  - Seeed Arduino rpcWiFi
  *  - Seeed Arduino SFUD
  *  - Seeed Arduino FS
  *  - Seeed Arduino mbedtls
+ *  - Seeed Arduino FreeRTOS
  *  - ArduinoOTA
  *  - ArduinoHttpClient
- *  
+ *
  * Please also update the WiFi module firmware:
  *   https://wiki.seeedstudio.com/Wio-Terminal-Network-Overview
  */
 
 // Fill-in information from your Blynk Template here
-//#define BLYNK_TEMPLATE_ID           "TMPLxxxxxx"
+//#define BLYNK_TEMPLATE_ID           "TMPxxxxxxx"
 //#define BLYNK_DEVICE_NAME           "Device"
 
 #define BLYNK_FIRMWARE_VERSION        "0.1.0"

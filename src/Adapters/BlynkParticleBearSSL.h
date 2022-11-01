@@ -1,25 +1,32 @@
 /**
- * @file       BlynkParticle.h
+ * @file       BlynkParticleBearSSL.h
  * @author     Volodymyr Shymanskyy
  * @license    This project is released under the MIT License (MIT)
- * @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
- * @date       Mar 2015
+ * @copyright  Copyright (c) 2022 Volodymyr Shymanskyy
+ * @date       Mar 2022
  * @brief
  *
  */
 
-#ifndef BlynkParticle_h
-#define BlynkParticle_h
+#ifndef BlynkParticleBearSSL_h
+#define BlynkParticleBearSSL_h
 
-#include "BlynkApiParticle.h"
-#include "Blynk/BlynkProtocol.h"
+#include <BlynkApiParticle.h>
+#include <Blynk/BlynkProtocol.h>
+
+#include <ArduinoBearSSL.h>
 
 class BlynkTransportParticle
 {
 public:
     BlynkTransportParticle()
-        : domain(NULL), port(0)
-    {}
+        : client(tcpclient), domain(NULL), port(0)
+    { }
+
+    static
+    unsigned long getTime() {
+      return 1654280000; // TODO
+    }
 
     void begin(IPAddress a, uint16_t p) {
         domain = NULL;
@@ -33,12 +40,18 @@ public:
     }
 
     bool connect() {
+        ArduinoBearSSL.onGetTime(getTime);
         if (domain) {
             BLYNK_LOG4(BLYNK_F("Connecting to "), domain, ':', port);
-            return (1 == client.connect(domain, port));
+            if (client.connect(domain, port)) {
+                BLYNK_LOG("Certificate OK");
+                return true;
+            } else {
+                BLYNK_LOG("Connection failed");
+            }
         } else {
             BLYNK_LOG_IP("Connecting to ", addr);
-            return (1 == client.connect(addr, port));
+            //return (1 == client.connect(addr, port));
         }
         return 0;
     }
@@ -58,7 +71,8 @@ public:
     int available() { return client.available(); }
 
 private:
-    TCPClient   client;
+    TCPClient     tcpclient;
+    BearSSLClient client;
     IPAddress   addr;
     const char* domain;
     uint16_t    port;
